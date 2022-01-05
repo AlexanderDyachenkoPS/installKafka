@@ -1,0 +1,14 @@
+[Unit]
+Requires=zookeeper.service
+After=zookeeper.service
+
+[Service]
+Type=simple
+User=root
+ExecStart=/bin/sh -c '{{ kafka_cluster.base_dir }}{{ kafka_cluster.work_dir }}/bin/kafka-server-start.sh {{ kafka_cluster.base_dir }}{{ kafka_cluster.work_dir }}/config/server.properties > /tmp/kafka-logs-1 2>&1'
+ExecStop={{ kafka_cluster.base_dir }}{{ kafka_cluster.work_dir }}/bin/kafka-server-stop.sh
+Restart=on-failure
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target

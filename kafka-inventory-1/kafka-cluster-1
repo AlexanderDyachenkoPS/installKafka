@@ -1,0 +1,13 @@
+[kafka_nodes]
+192.168.0.202 
+192.168.0.237 
+192.168.0.131
+
+[zk_nodes]
+192.168.0.202 myid=1
+192.168.0.237 myid=3
+192.168.0.131 myid=2
+
+[kafka_cluster:children]
+zk_nodes
+kafka_nodes

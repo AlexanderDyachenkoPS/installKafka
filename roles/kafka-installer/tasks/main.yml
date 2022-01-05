@@ -1,0 +1,174 @@
+---
+# tasks file for kafka-installer-1
+- name: get kafka
+  get_url:
+    url:            "{{ kafka_cluster.distr_url }}"
+    dest:           /tmp/kafka_2.13-3.0.0.tgz
+    validate_certs: false
+  tags:
+    - install
+    - update
+
+- name: make directory 4 kafka
+  ansible.builtin.file:
+    path:           "{{ kafka_cluster.base_dir }}"
+    state:          directory
+    mode:           '0755'
+  tags:
+    - install
+    - update
+
+- name: make data directory for zookeeper
+  ansible.builtin.file:
+    path:           "{{ kafka_cluster.data_dir }}{{ kafka_cluster.zookeeper_data_dir }}"
+    state:          directory
+    mode:           '0755'
+  tags:
+    - install
+    - update
+
+- name: make data directory for kafka
+  ansible.builtin.file:
+    path:           "{{ kafka_cluster.data_dir }}{{ kafka_cluster.kafka_data_dir }}"
+    state:          directory
+    mode:           '0755'
+  tags:
+    - install
+    - update
+
+- name: unarchive kafka
+  ansible.builtin.unarchive: 
+    src:            /tmp/kafka_2.13-3.0.0.tgz
+    dest:           "{{ kafka_cluster.base_dir }}"
+    remote_src:     yes
+  tags:
+    - install
+    - update
+
+- name: create symlink
+  ansible.builtin.file:
+    src:            "{{ kafka_cluster.base_dir }}/kafka_2.13-3.0.0"
+    dest:           "{{kafka_cluster.base_dir }}{{ kafka_cluster.work_dir }}"
+    owner:          root
+    state:          link
+  tags:
+    - install
+    - update
+
+- name: copy zookeeper config file
+  template:
+    src:            templates/zookeeper.config.j2
+    dest:           "{{kafka_cluster.base_dir }}{{ kafka_cluster.work_dir }}/config/zookeeper.properties"
+  tags:
+    - install
+    - update
+
+- name: copy kafka config file
+  template:
+    src:            templates/kafka.config.j2
+    dest:           "{{kafka_cluster.base_dir }}{{ kafka_cluster.work_dir }}/config/server.properties"
+  tags:
+    - install
+    - update
+
+#- name: debug 
+#  ansible.builtin.debug:
+#    var: hostvars[inventory_hostname]['myid']
+#  tags:
+#    - deb
+
+- name: copy zookeeper myid file
+  template:
+    src:            templates/zookeeper.myid.j2
+    dest:           "{{ kafka_cluster.data_dir }}{{ kafka_cluster.zookeeper_data_dir }}/myid"
+  tags:
+    - install
+    - update
+
+- name: copy zookeeper systemd service file
+  template:
+    src:            templates/zookeeper.service.j2
+    dest:           /lib/systemd/system/zookeeper.service
+  tags:
+    - install
+    - update
+
+- name: copy kafka systemd service file
+  template:
+    src:            templates/kafka.service.j2
+    dest:           /lib/systemd/system/kafka.service
+  tags:
+    - install
+    - update
+
+- name: stop firewalld
+  ansible.builtin.service:
+    name:           firewalld
+    state:          stopped
+  tags:
+    - install
+    - update
+
+- name: Enable service zookeeper
+  ansible.builtin.service:
+    name:           zookeeper
+    enabled:        yes
+  tags:
+    - install
+    - update
+
+- name: Enable service kafka
+  ansible.builtin.service:
+    name:           kafka
+    enabled:        yes
+  tags:
+    - install
+    - update
+
+- name: Stop service kafka
+  ansible.builtin.service:
+    name:           kafka
+    state:          stopped
+  tags:
+    - stop
+    - restart
+    - install
+    - update
+
+- name: Stop service zookeeper
+  ansible.builtin.service:
+    name: zookeeper
+    state: stopped
+  tags:
+    - stop
+    - restart
+    - install
+    - update
+
+- name: Reload services
+  systemd: daemon_reload=yes
+  tags:
+    - install
+    - update
+
+- name: Start service zookeeper
+  ansible.builtin.service:
+    name: zookeeper
+    state: started
+  tags:
+    - start
+    - restart
+    - install
+    - update
+
+- name: Start service kafka
+  ansible.builtin.service:
+    name: kafka
+    state: started
+  tags:
+    - start
+    - restart
+    - install
+    - update
+
+
