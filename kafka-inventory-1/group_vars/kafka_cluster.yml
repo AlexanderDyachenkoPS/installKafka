@@ -1,6 +1,6 @@
 ---
 kafka_cluster:
-  distr_url:             https://dlcdn.apache.org/kafka/3.0.0/kafka_2.13-3.0.0.tgz
+  distr_url:             https://dlcdn.apache.org/kafka/3.6.1/kafka_2.13-3.6.1.tgz
   base_dir:              /u01/kafka
   work_dir:              /current
   data_dir:              /u01/data

@@ -47,7 +47,7 @@
 
 - name: create symlink
   ansible.builtin.file:
-    src:            "{{ kafka_cluster.base_dir }}/kafka_2.13-3.0.0"
+    src:            "{{ kafka_cluster.base_dir }}/kafka_2.13-3.6.1"
     dest:           "{{kafka_cluster.base_dir }}{{ kafka_cluster.work_dir }}"
     owner:          root
     state:          link
@@ -101,13 +101,13 @@
     - install
     - update
 
-- name: stop firewalld
-  ansible.builtin.service:
-    name:           firewalld
-    state:          stopped
-  tags:
-    - install
-    - update
+#- name: stop firewalld
+#  ansible.builtin.service:
+#    name:           firewalld
+#    state:          stopped
+#  tags:
+#    - install
+#    - update
 
 - name: Enable service zookeeper
   ansible.builtin.service:
