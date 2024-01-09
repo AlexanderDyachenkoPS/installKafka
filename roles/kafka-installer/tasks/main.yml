@@ -71,6 +71,23 @@
     - install
     - update
 
+- name: copy kafka jaas config file
+  template:
+    src:            templates/kafka.sasl.plain.config.j2
+    dest:           "{{kafka_cluster.base_dir }}{{ kafka_cluster.work_dir }}/config/kafka_server_jaas.conf"
+  tags:
+    - install
+    - update
+
+- name: copy ZK jaas config file
+  template:
+    src:            templates/zookeeker.kafka.sasl.plain.config.j2
+    dest:           "{{kafka_cluster.base_dir }}{{ kafka_cluster.work_dir }}/config/zookeeper_jaas.conf"
+  tags:
+    - install
+    - update
+
+
 #- name: debug 
 #  ansible.builtin.debug:
 #    var: hostvars[inventory_hostname]['myid']

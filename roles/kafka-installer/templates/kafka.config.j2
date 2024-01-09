@@ -1,6 +1,6 @@
 broker.id={{ hostvars[inventory_hostname]['myid'] }}
 # change this to the hostname of each broker
-advertised.listeners=PLAINTEXT://{{ inventory_hostname }}:9092
+#advertised.listeners=PLAINTEXT://{{ inventory_hostname }}:9092
 # The ability to delete topics
 delete.topic.enable=true
 # Where logs are stored
@@ -23,3 +23,23 @@ zookeeper.connect=192.168.0.240:2181,192.168.0.137:2181,192.168.0.156:2181/kafka
 zookeeper.connection.timeout.ms=6000
 # automatically create topics
 auto.create.topics.enable=true
+
+
+# AUTH ACL
+#sasl.enabled.mechanisms=PLAIN, SASL_PLAINTEXT
+
+# Specify one of of the SASL mechanisms
+#sasl.mechanism.inter.broker.protocol=SASL_PLAINTEXT
+#security.inter.broker.protocol=SASL_PLAINTEXT
+
+
+#listeners=SASL_PLAINTEXT://{{ inventory_hostname }}:9092
+#advertised.listeners=SASL_PLAINTEXT://{{ inventory_hostname }}:9092
+
+security.inter.broker.protocol=SASL_PLAINTEXT
+sasl.mechanism.inter.broker.protocol=PLAIN
+sasl.enabled.mechanisms=PLAIN
+listeners=SASL_PLAINTEXT://{{ inventory_hostname }}:9092
+
+confluent.metrics.reporter.sasl.mechanism=PLAIN
+confluent.metrics.reporter.security.protocol=SASL_PLAINTEXT

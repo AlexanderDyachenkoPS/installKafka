@@ -1,6 +1,14 @@
-security.protocol=SASL_PLAINTEXT
-sasl.mechanism=PLAIN
-# Uncomment and set necessary username/password
-sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule required \
- username="kafka" \
- password="kafka-password";
+KafkaServer {
+  org.apache.kafka.common.security.plain.PlainLoginModule required
+  username="admin"
+  password="admin-secret"
+  user_admin="admin-secret"
+  user_confluent="confluent-secret"
+  user_metricsreporter="metricsreporter-secret";
+};
+
+KafkaClient {
+  org.apache.kafka.common.security.plain.PlainLoginModule required
+  username="metricsreporter"
+  password="metricsreporter-secret";
+};
