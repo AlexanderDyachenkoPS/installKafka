@@ -43,3 +43,10 @@ listeners=SASL_PLAINTEXT://{{ inventory_hostname }}:9092
 
 confluent.metrics.reporter.sasl.mechanism=PLAIN
 confluent.metrics.reporter.security.protocol=SASL_PLAINTEXT
+
+#authorizer.class.name=io.confluent.kafka.security.authorizer.ConfluentServerAuthorizer
+authorizer.class.name=kafka.security.authorizer.AclAuthorizer
+#allow.everyone.if.no.acl.found=true
+super.users=User:admin
+#zookeeper.set.acl=true
+#authorizer.class.name=org.apache.kafka.metadata.authorizer.StandardAuthorizer
