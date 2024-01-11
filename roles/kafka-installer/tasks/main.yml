@@ -118,6 +118,14 @@
     - install
     - update
 
+- name: copy kafka log4j properties file
+  template:
+    src:            templates/kafka.log4j.config.j2
+    dest:           "{{kafka_cluster.base_dir }}{{ kafka_cluster.work_dir }}/config/log4j.properties"
+  tags:
+    - install
+    - update
+
 #- name: stop firewalld
 #  ansible.builtin.service:
 #    name:           firewalld
